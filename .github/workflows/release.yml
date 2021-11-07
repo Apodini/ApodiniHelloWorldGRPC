@@ -18,4 +18,4 @@ jobs:
     name: Generate Docs
     uses: Apodini/.github/.github/workflows/docs.yml@main
     with:
-      packagename: ApodiniTemplate
+      packagename: ApodiniHelloWorld

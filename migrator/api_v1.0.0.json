@@ -1,0 +1,72 @@
+{
+    "id": "46907251-A372-45D3-8EF6-68132D57271F",
+    "info": {
+        "serverPath": "https://0.0.0.0:8080",
+        "version": "v_1.0.0",
+        "encoderConfiguration": {
+            "dateEncodingStrategy": "deferredToDate",
+            "dataEncodingStrategy": "base64"
+        },
+        "decoderConfiguration": {
+            "dateDecodingStrategy": "deferredToDate",
+            "dataDecodingStrategy": "base64"
+        }
+    },
+    "endpoints": [
+        {
+            "handlerName": "Greeter",
+            "deltaIdentifier": "greeter",
+            "operation": "read",
+            "path": "/v1",
+            "parameters": [
+                {
+                    "name": "name",
+                    "type": {
+                        "scalar": "String"
+                    },
+                    "kind": "lightweight",
+                    "necessity": "required"
+                }
+            ],
+            "response": {
+                "reference": "Greeting"
+            },
+            "errors": [
+                {
+                    "code": 401,
+                    "message": "Unauthorized"
+                },
+                {
+                    "code": 403,
+                    "message": "Forbidden"
+                },
+                {
+                    "code": 404,
+                    "message": "Not found"
+                },
+                {
+                    "code": 500,
+                    "message": "Internal server error"
+                }
+            ]
+        }
+    ],
+    "components": {
+        "Greeting": {
+            "object": {
+                "typeName": {
+                    "name": "Greeting",
+                    "defined-in": "HelloWorld"
+                },
+                "properties": [
+                    {
+                        "name": "greet",
+                        "type": {
+                            "scalar": "String"
+                        }
+                    }
+                ]
+            }
+        }
+    }
+}
