@@ -12,7 +12,7 @@ defer {
 }
 
 let channel = ClientConnection
-    .usingTLSBackedByNIOSSL(on: group) // TODO .secure(group:)
+    .usingTLSBackedByNIOSSL(on: group)
     .withTLS(certificateVerification: .none)
     .connect(host: "127.0.0.1", port: 8080)
 defer {
