@@ -32,12 +32,12 @@ struct GreeterMessage {
   init() {}
 }
 
-struct StringMessageMessage {
+struct GreetingMessage {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
-  var value: String = String()
+  var greet: String = String()
 
   var unknownFields = SwiftProtobuf.UnknownStorage()
 
@@ -78,10 +78,10 @@ extension GreeterMessage: SwiftProtobuf.Message, SwiftProtobuf._MessageImplement
   }
 }
 
-extension StringMessageMessage: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  static let protoMessageName: String = "StringMessage"
+extension GreetingMessage: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  static let protoMessageName: String = "GreetingMessage"
   static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "value"),
+    1: .same(proto: "greet"),
   ]
 
   mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -90,21 +90,21 @@ extension StringMessageMessage: SwiftProtobuf.Message, SwiftProtobuf._MessageImp
       // allocates stack space for every case branch when no optimizations are
       // enabled. https://github.com/apple/swift-protobuf/issues/1034
       switch fieldNumber {
-      case 1: try { try decoder.decodeSingularStringField(value: &self.value) }()
+      case 1: try { try decoder.decodeSingularStringField(value: &self.greet) }()
       default: break
       }
     }
   }
 
   func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    if !self.value.isEmpty {
-      try visitor.visitSingularStringField(value: self.value, fieldNumber: 1)
+    if !self.greet.isEmpty {
+      try visitor.visitSingularStringField(value: self.greet, fieldNumber: 1)
     }
     try unknownFields.traverse(visitor: &visitor)
   }
 
-  static func ==(lhs: StringMessageMessage, rhs: StringMessageMessage) -> Bool {
-    if lhs.value != rhs.value {return false}
+  static func ==(lhs: GreetingMessage, rhs: GreetingMessage) -> Bool {
+    if lhs.greet != rhs.greet {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }

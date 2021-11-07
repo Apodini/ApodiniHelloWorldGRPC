@@ -6,6 +6,7 @@ import Foundation
 import Apodini
 import ApodiniGRPC
 import ApodiniProtobuffer
+import ApodiniMigration
 
 @main
 struct HelloWorldService: WebService {
@@ -24,6 +25,8 @@ struct HelloWorldService: WebService {
            let key = Bundle.module.path(forResource: "key", ofType: "pem") {
             HTTP2Configuration(cert: cert, keyPath: key)
         }
+
+        Migrator(documentConfig: DocumentConfiguration.export(.directory("~/XcodeProjects/TUM/ApodiniHelloWorld/migrator")))
     }
 }
 
@@ -31,9 +34,17 @@ struct Greeter: Handler {
     @Parameter
     var name: String
 
-    func handle() -> String {
-        "Hello \(name)"
+    func handle() -> Greeting {
+        Greeting(stringLiteral: "Hello \(name)")
     }
 
-    // TODO metadata for rpcName and servicename?
+    // TODO metadata for rpcName and serviceName?
+}
+
+struct Greeting: ExpressibleByStringLiteral, Content {
+    var greet: String
+    
+    init(stringLiteral: String) {
+        self.greet = stringLiteral
+    }
 }

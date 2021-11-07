@@ -1,13 +1,13 @@
 syntax = "proto3";
 
 service Greeter {
-  rpc greetName (GreeterMessage) returns (StringMessage);
+  rpc greetName (GreeterMessage) returns (GreetingMessage);
 }
 
 message GreeterMessage {
   string name = 1;
 }
 
-message StringMessage {
-  string value = 1;
+message GreetingMessage {
+  string greet = 1;
 }

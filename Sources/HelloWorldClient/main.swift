@@ -21,7 +21,6 @@ defer {
 
 let client = GreeterAsyncClient(channel: channel)
 
-
 let promise: EventLoopPromise<Void> = group.next().makePromise()
 
 promise.completeWithTask {
@@ -29,7 +28,7 @@ promise.completeWithTask {
     message.name = "Andi"
 
     let response = try await client.greetName(message)
-    print("Response: \(response.value)")
+    print("Response: \(response.greet)")
 }
 
 try promise.futureResult.wait()

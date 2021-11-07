@@ -33,7 +33,7 @@ internal protocol GreeterClientProtocol: GRPCClient {
   func greetName(
     _ request: GreeterMessage,
     callOptions: CallOptions?
-  ) -> UnaryCall<GreeterMessage, StringMessageMessage>
+  ) -> UnaryCall<GreeterMessage, GreetingMessage>
 }
 
 extension GreeterClientProtocol {
@@ -50,7 +50,7 @@ extension GreeterClientProtocol {
   internal func greetName(
     _ request: GreeterMessage,
     callOptions: CallOptions? = nil
-  ) -> UnaryCall<GreeterMessage, StringMessageMessage> {
+  ) -> UnaryCall<GreeterMessage, GreetingMessage> {
     return self.makeUnaryCall(
       path: "/Greeter/greetName",
       request: request,
@@ -63,7 +63,7 @@ extension GreeterClientProtocol {
 internal protocol GreeterClientInterceptorFactoryProtocol {
 
   /// - Returns: Interceptors to use when invoking 'greetName'.
-  func makegreetNameInterceptors() -> [ClientInterceptor<GreeterMessage, StringMessageMessage>]
+  func makegreetNameInterceptors() -> [ClientInterceptor<GreeterMessage, GreetingMessage>]
 }
 
 internal final class GreeterClient: GreeterClientProtocol {
@@ -97,7 +97,7 @@ internal protocol GreeterAsyncClientProtocol: GRPCClient {
   func makegreetNameCall(
     _ request: GreeterMessage,
     callOptions: CallOptions?
-  ) -> GRPCAsyncUnaryCall<GreeterMessage, StringMessageMessage>
+  ) -> GRPCAsyncUnaryCall<GreeterMessage, GreetingMessage>
 }
 
 @available(macOS 12, iOS 15, tvOS 15, watchOS 8, *)
@@ -113,7 +113,7 @@ extension GreeterAsyncClientProtocol {
   internal func makegreetNameCall(
     _ request: GreeterMessage,
     callOptions: CallOptions? = nil
-  ) -> GRPCAsyncUnaryCall<GreeterMessage, StringMessageMessage> {
+  ) -> GRPCAsyncUnaryCall<GreeterMessage, GreetingMessage> {
     return self.makeAsyncUnaryCall(
       path: "/Greeter/greetName",
       request: request,
@@ -128,7 +128,7 @@ extension GreeterAsyncClientProtocol {
   internal func greetName(
     _ request: GreeterMessage,
     callOptions: CallOptions? = nil
-  ) async throws -> StringMessageMessage {
+  ) async throws -> GreetingMessage {
     return try await self.performAsyncUnaryCall(
       path: "/Greeter/greetName",
       request: request,
@@ -156,43 +156,4 @@ internal struct GreeterAsyncClient: GreeterAsyncClientProtocol {
 }
 
 #endif // compiler(>=5.5) && canImport(_Concurrency)
-
-/// To build a server, implement a class that conforms to this protocol.
-internal protocol GreeterProvider: CallHandlerProvider {
-  var interceptors: GreeterServerInterceptorFactoryProtocol? { get }
-
-  func greetName(request: GreeterMessage, context: StatusOnlyCallContext) -> EventLoopFuture<StringMessageMessage>
-}
-
-extension GreeterProvider {
-  internal var serviceName: Substring { return "Greeter" }
-
-  /// Determines, calls and returns the appropriate request handler, depending on the request's method.
-  /// Returns nil for methods not handled by this service.
-  internal func handle(
-    method name: Substring,
-    context: CallHandlerContext
-  ) -> GRPCServerHandlerProtocol? {
-    switch name {
-    case "greetName":
-      return UnaryServerHandler(
-        context: context,
-        requestDeserializer: ProtobufDeserializer<GreeterMessage>(),
-        responseSerializer: ProtobufSerializer<StringMessageMessage>(),
-        interceptors: self.interceptors?.makegreetNameInterceptors() ?? [],
-        userFunction: self.greetName(request:context:)
-      )
-
-    default:
-      return nil
-    }
-  }
-}
-
-internal protocol GreeterServerInterceptorFactoryProtocol {
-
-  /// - Returns: Interceptors to use when handling 'greetName'.
-  ///   Defaults to calling `self.makeInterceptors()`.
-  func makegreetNameInterceptors() -> [ServerInterceptor<GreeterMessage, StringMessageMessage>]
-}
 

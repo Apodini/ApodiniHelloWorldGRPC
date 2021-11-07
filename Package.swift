@@ -22,7 +22,8 @@ let package = Package(
                 .product(name: "ApodiniGRPC", package: "Apodini"),
                 .product(name: "ApodiniProtobuffer", package: "Apodini"),
                 .product(name: "ApodiniREST", package: "Apodini"),
-                .product(name: "ApodiniOpenAPI", package: "Apodini")
+                .product(name: "ApodiniOpenAPI", package: "Apodini"),
+                .product(name: "ApodiniMigration", package: "Apodini")
             ],
             resources: [
                 .process("cert")
