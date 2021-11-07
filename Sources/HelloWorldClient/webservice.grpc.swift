@@ -88,6 +88,75 @@ internal final class GreeterClient: GreeterClientProtocol {
   }
 }
 
+#if compiler(>=5.5) && canImport(_Concurrency)
+@available(macOS 12, iOS 15, tvOS 15, watchOS 8, *)
+internal protocol GreeterAsyncClientProtocol: GRPCClient {
+  var serviceName: String { get }
+  var interceptors: GreeterClientInterceptorFactoryProtocol? { get }
+
+  func makegreetNameCall(
+    _ request: GreeterMessage,
+    callOptions: CallOptions?
+  ) -> GRPCAsyncUnaryCall<GreeterMessage, StringMessageMessage>
+}
+
+@available(macOS 12, iOS 15, tvOS 15, watchOS 8, *)
+extension GreeterAsyncClientProtocol {
+  internal var serviceName: String {
+    return "Greeter"
+  }
+
+  internal var interceptors: GreeterClientInterceptorFactoryProtocol? {
+    return nil
+  }
+
+  internal func makegreetNameCall(
+    _ request: GreeterMessage,
+    callOptions: CallOptions? = nil
+  ) -> GRPCAsyncUnaryCall<GreeterMessage, StringMessageMessage> {
+    return self.makeAsyncUnaryCall(
+      path: "/Greeter/greetName",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makegreetNameInterceptors() ?? []
+    )
+  }
+}
+
+@available(macOS 12, iOS 15, tvOS 15, watchOS 8, *)
+extension GreeterAsyncClientProtocol {
+  internal func greetName(
+    _ request: GreeterMessage,
+    callOptions: CallOptions? = nil
+  ) async throws -> StringMessageMessage {
+    return try await self.performAsyncUnaryCall(
+      path: "/Greeter/greetName",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makegreetNameInterceptors() ?? []
+    )
+  }
+}
+
+@available(macOS 12, iOS 15, tvOS 15, watchOS 8, *)
+internal struct GreeterAsyncClient: GreeterAsyncClientProtocol {
+  internal var channel: GRPCChannel
+  internal var defaultCallOptions: CallOptions
+  internal var interceptors: GreeterClientInterceptorFactoryProtocol?
+
+  internal init(
+    channel: GRPCChannel,
+    defaultCallOptions: CallOptions = CallOptions(),
+    interceptors: GreeterClientInterceptorFactoryProtocol? = nil
+  ) {
+    self.channel = channel
+    self.defaultCallOptions = defaultCallOptions
+    self.interceptors = interceptors
+  }
+}
+
+#endif // compiler(>=5.5) && canImport(_Concurrency)
+
 /// To build a server, implement a class that conforms to this protocol.
 internal protocol GreeterProvider: CallHandlerProvider {
   var interceptors: GreeterServerInterceptorFactoryProtocol? { get }
@@ -126,3 +195,4 @@ internal protocol GreeterServerInterceptorFactoryProtocol {
   ///   Defaults to calling `self.makeInterceptors()`.
   func makegreetNameInterceptors() -> [ServerInterceptor<GreeterMessage, StringMessageMessage>]
 }
+

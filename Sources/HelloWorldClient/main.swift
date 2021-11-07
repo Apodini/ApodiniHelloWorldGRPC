@@ -7,20 +7,29 @@ import NIO
 import GRPC
 
 let group = MultiThreadedEventLoopGroup(numberOfThreads: 1)
+defer {
+    try! group.syncShutdownGracefully()
+}
+
 let channel = ClientConnection
     .usingTLSBackedByNIOSSL(on: group) // TODO .secure(group:)
     .withTLS(certificateVerification: .none)
     .connect(host: "127.0.0.1", port: 8080)
+defer {
+    try! channel.close().wait()
+}
 
-let client = GreeterClient(channel: channel)
+let client = GreeterAsyncClient(channel: channel)
 
-var message = GreeterMessage()
-message.name = "Andi"
 
-let response = try client.greetName(message).response.wait()
+let promise: EventLoopPromise<Void> = group.next().makePromise()
 
-print("Response: \(response.value)")
+promise.completeWithTask {
+    var message = GreeterMessage()
+    message.name = "Andi"
 
-try channel.close().wait()
+    let response = try await client.greetName(message)
+    print("Response: \(response.value)")
+}
 
-try group.syncShutdownGracefully()
+try promise.futureResult.wait()
