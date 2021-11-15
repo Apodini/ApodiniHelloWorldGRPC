@@ -19,7 +19,7 @@ let package = Package(
         .executable(name: "HelloWorld", targets: ["HelloWorld"])
     ],
     dependencies: [
-        .package(url: "https://github.com/Apodini/Apodini.git", .branch("maintenance/nio-dependency")),
+        .package(url: "https://github.com/Apodini/Apodini.git", .upToNextMinor(from: "0.5.2")),
         .package(url: "https://github.com/grpc/grpc-swift.git", .exact("1.4.1-async-await.3"))
     ],
     targets: [
@@ -40,7 +40,22 @@ let package = Package(
         .executableTarget(
             name: "HelloWorldClient",
             dependencies: [
+                .product(name: "GRPC", package: "grpc-swift"),
+                .target(name: "PB.SWIFT"),
+                .target(name: "GRPC.SWIFT")
+            ]
+        ),
+        .target(
+            name: "PB.SWIFT",
+            dependencies: [
                 .product(name: "GRPC", package: "grpc-swift")
+            ]
+        ),
+        .target(
+            name: "GRPC.SWIFT",
+            dependencies: [
+                .product(name: "GRPC", package: "grpc-swift"),
+                .target(name: "PB.SWIFT"),
             ]
         )
     ]

@@ -4,6 +4,24 @@
 
 import Foundation
 
+import PB_SWIFT
+import GRPC_SWIFT
+
+// ********** generated models
+public typealias GreeterMessage = PB_SWIFT.GreeterMessage
+public typealias GreetingMessage = PB_SWIFT.GreetingMessage
+// ************
+
+// ******* generated clients
+public typealias GreeterClientProtocol = GRPC_SWIFT.GreeterClientProtocol
+public typealias GreeterClient = GRPC_SWIFT.GreeterClient
+
+public typealias GreeterAsyncClientProtocol = GRPC_SWIFT.GreeterAsyncClientProtocol
+public typealias GreeterAsyncClient = GRPC_SWIFT.GreeterAsyncClient
+
+public typealias GreeterClientInterceptorFactoryProtocol = GRPC_SWIFT.GreeterClientInterceptorFactoryProtocol
+// *******
+
 // TODO property addition: no need
 // TODO property renaming: extension with computed property (kinda hard, as we need to cover all grpc generated additional property: e.g. hasName, clearName for name!) => @available tag?
 // TODO property removal: extension with computed property (as above!) => @available tag?

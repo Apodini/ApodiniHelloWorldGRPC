@@ -24,9 +24,11 @@ import GRPC
 import NIO
 import SwiftProtobuf
 
+// TODO needs to be generated
+import PB_SWIFT
 
 /// Usage: instantiate `GreeterClient`, then call methods of this protocol to make API calls.
-internal protocol GreeterClientProtocol: GRPCClient {
+public protocol GreeterClientProtocol: GRPCClient {
   var serviceName: String { get }
   var interceptors: GreeterClientInterceptorFactoryProtocol? { get }
 
@@ -37,7 +39,7 @@ internal protocol GreeterClientProtocol: GRPCClient {
 }
 
 extension GreeterClientProtocol {
-  internal var serviceName: String {
+  public var serviceName: String {
     return "Greeter"
   }
 
@@ -47,7 +49,7 @@ extension GreeterClientProtocol {
   ///   - request: Request to send to greetName.
   ///   - callOptions: Call options.
   /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
-  internal func greetName(
+  public func greetName(
     _ request: GreeterMessage,
     callOptions: CallOptions? = nil
   ) -> UnaryCall<GreeterMessage, GreetingMessage> {
@@ -60,16 +62,16 @@ extension GreeterClientProtocol {
   }
 }
 
-internal protocol GreeterClientInterceptorFactoryProtocol {
+public protocol GreeterClientInterceptorFactoryProtocol {
 
   /// - Returns: Interceptors to use when invoking 'greetName'.
   func makegreetNameInterceptors() -> [ClientInterceptor<GreeterMessage, GreetingMessage>]
 }
 
-internal final class GreeterClient: GreeterClientProtocol {
-  internal let channel: GRPCChannel
-  internal var defaultCallOptions: CallOptions
-  internal var interceptors: GreeterClientInterceptorFactoryProtocol?
+public final class GreeterClient: GreeterClientProtocol {
+  public let channel: GRPCChannel
+  public var defaultCallOptions: CallOptions
+  public var interceptors: GreeterClientInterceptorFactoryProtocol?
 
   /// Creates a client for the Greeter service.
   ///
@@ -77,7 +79,7 @@ internal final class GreeterClient: GreeterClientProtocol {
   ///   - channel: `GRPCChannel` to the service host.
   ///   - defaultCallOptions: Options to use for each service call if the user doesn't provide them.
   ///   - interceptors: A factory providing interceptors for each RPC.
-  internal init(
+  public init(
     channel: GRPCChannel,
     defaultCallOptions: CallOptions = CallOptions(),
     interceptors: GreeterClientInterceptorFactoryProtocol? = nil
@@ -90,7 +92,7 @@ internal final class GreeterClient: GreeterClientProtocol {
 
 #if compiler(>=5.5) && canImport(_Concurrency)
 @available(macOS 12, iOS 15, tvOS 15, watchOS 8, *)
-internal protocol GreeterAsyncClientProtocol: GRPCClient {
+public protocol GreeterAsyncClientProtocol: GRPCClient {
   var serviceName: String { get }
   var interceptors: GreeterClientInterceptorFactoryProtocol? { get }
 
@@ -102,15 +104,15 @@ internal protocol GreeterAsyncClientProtocol: GRPCClient {
 
 @available(macOS 12, iOS 15, tvOS 15, watchOS 8, *)
 extension GreeterAsyncClientProtocol {
-  internal var serviceName: String {
+  public var serviceName: String {
     return "Greeter"
   }
 
-  internal var interceptors: GreeterClientInterceptorFactoryProtocol? {
+  public var interceptors: GreeterClientInterceptorFactoryProtocol? {
     return nil
   }
 
-  internal func makegreetNameCall(
+  public func makegreetNameCall(
     _ request: GreeterMessage,
     callOptions: CallOptions? = nil
   ) -> GRPCAsyncUnaryCall<GreeterMessage, GreetingMessage> {
@@ -125,7 +127,7 @@ extension GreeterAsyncClientProtocol {
 
 @available(macOS 12, iOS 15, tvOS 15, watchOS 8, *)
 extension GreeterAsyncClientProtocol {
-  internal func greetName(
+  public func greetName(
     _ request: GreeterMessage,
     callOptions: CallOptions? = nil
   ) async throws -> GreetingMessage {
@@ -139,12 +141,12 @@ extension GreeterAsyncClientProtocol {
 }
 
 @available(macOS 12, iOS 15, tvOS 15, watchOS 8, *)
-internal struct GreeterAsyncClient: GreeterAsyncClientProtocol {
-  internal var channel: GRPCChannel
-  internal var defaultCallOptions: CallOptions
-  internal var interceptors: GreeterClientInterceptorFactoryProtocol?
+public struct GreeterAsyncClient: GreeterAsyncClientProtocol {
+  public var channel: GRPCChannel
+  public var defaultCallOptions: CallOptions
+  public var interceptors: GreeterClientInterceptorFactoryProtocol?
 
-  internal init(
+  public init(
     channel: GRPCChannel,
     defaultCallOptions: CallOptions = CallOptions(),
     interceptors: GreeterClientInterceptorFactoryProtocol? = nil
