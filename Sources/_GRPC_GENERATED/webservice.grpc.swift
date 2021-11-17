@@ -25,7 +25,7 @@ import NIO
 import SwiftProtobuf
 
 // TODO needs to be generated
-import PB_SWIFT
+import _PB_FACADE
 
 /// Usage: instantiate `GreeterClient`, then call methods of this protocol to make API calls.
 public protocol GreeterClientProtocol: GRPCClient {

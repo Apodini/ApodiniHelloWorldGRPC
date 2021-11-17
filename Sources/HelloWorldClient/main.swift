@@ -24,8 +24,7 @@ let client = GreeterAsyncClient(channel: channel)
 let promise: EventLoopPromise<Void> = group.next().makePromise()
 
 promise.completeWithTask {
-    var message = GreeterMessage()
-    message.name = "Andi"
+    let message = GreeterMessage(name: "Andi")
 
     let response = try await client.greetName(message)
     print("Response: \(response.greet)")

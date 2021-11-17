@@ -16,7 +16,7 @@ let package = Package(
         .macOS(.v12)
     ],
     products: [
-        .executable(name: "HelloWorld", targets: ["HelloWorld"])
+        .executable(name: "ApodiniHelloWorld", targets: ["ApodiniHelloWorld"])
     ],
     dependencies: [
         .package(url: "https://github.com/Apodini/Apodini.git", .upToNextMinor(from: "0.5.2")),
@@ -24,7 +24,7 @@ let package = Package(
     ],
     targets: [
         .executableTarget(
-            name: "HelloWorld",
+            name: "ApodiniHelloWorld",
             dependencies: [
                 .product(name: "Apodini", package: "Apodini"),
                 .product(name: "ApodiniGRPC", package: "Apodini"),
@@ -41,21 +41,35 @@ let package = Package(
             name: "HelloWorldClient",
             dependencies: [
                 .product(name: "GRPC", package: "grpc-swift"),
-                .target(name: "PB.SWIFT"),
-                .target(name: "GRPC.SWIFT")
+                .target(name: "_PB_FACADE"),
+                .target(name: "_GRPC_FACADE")
             ]
         ),
         .target(
-            name: "PB.SWIFT",
+            name: "_PB_GENERATED",
             dependencies: [
                 .product(name: "GRPC", package: "grpc-swift")
             ]
         ),
         .target(
-            name: "GRPC.SWIFT",
+            name: "_PB_FACADE",
+            dependencies: [
+                .target(name: "_PB_GENERATED")
+            ]
+        ),
+
+        .target(
+            name: "_GRPC_GENERATED",
             dependencies: [
                 .product(name: "GRPC", package: "grpc-swift"),
-                .target(name: "PB.SWIFT"),
+                .target(name: "_PB_FACADE"),
+            ]
+        ),
+
+        .target(
+            name: "_GRPC_FACADE",
+            dependencies: [
+                .target(name: "_GRPC_GENERATED")
             ]
         )
     ]

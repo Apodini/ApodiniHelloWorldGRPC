@@ -3,24 +3,106 @@
 //
 
 import Foundation
+import SwiftProtobuf
+import GRPC
+import _PB_GENERATED
 
-import PB_SWIFT
-import GRPC_SWIFT
+public typealias SwiftProtobufProtocols = SwiftProtobuf.Message & SwiftProtobuf._MessageImplementationBase & SwiftProtobuf._ProtoNameProviding
+
+// TODO conformance to CustomReflectable
+
+public protocol SwiftProtobufWrapper: SwiftProtobufProtocols {
+    associatedtype Wrapped: SwiftProtobufProtocols
+
+    var __wrapped: Wrapped { get set }// TODO access protection!!
+    // TODO fileprivate var wrapped: _PB_GENERATED.GreeterMessage
+
+    subscript<T>(dynamicMember member: KeyPath<Wrapped, T>) -> T { get }
+
+    subscript<T>(dynamicMember member: WritableKeyPath<Wrapped, T>) -> T { get set }
+}
+
+// MARK - @dynamicMemberLookup
+public extension SwiftProtobufWrapper {
+    subscript<T>(dynamicMember member: KeyPath<Wrapped, T>) -> T {
+        get {
+            __wrapped[keyPath: member]
+        }
+    }
+
+    subscript<T>(dynamicMember member: WritableKeyPath<Wrapped, T>) -> T {
+        get {
+            __wrapped[keyPath: member]
+        }
+        set {
+            __wrapped[keyPath: member] = newValue
+        }
+    }
+}
+
+// MARK: SwiftProtobufProtocols
+public extension SwiftProtobufWrapper {
+    public static var protoMessageName: String {
+        Wrapped.protoMessageName
+    }
+
+    public static var _protobuf_nameMap: _NameMap {
+        Wrapped._protobuf_nameMap
+    }
+
+    public var unknownFields: UnknownStorage {
+        get {
+            __wrapped.unknownFields
+        }
+        set(newValue) {
+            __wrapped.unknownFields = newValue
+        }
+    }
+
+    public mutating func decodeMessage<D: Decoder>(decoder: inout D) throws {
+        try __wrapped.decodeMessage(decoder: &decoder)
+    }
+
+    public func traverse<V: Visitor>(visitor: inout V) throws {
+        try __wrapped.traverse(visitor: &visitor)
+    }
+}
 
 // ********** generated models
-public typealias GreeterMessage = PB_SWIFT.GreeterMessage
-public typealias GreetingMessage = PB_SWIFT.GreetingMessage
+// TODO one drawback with this wrapper method is, that we must generate/mirror all methods defined on the wrapped object
+//  less of a problem with the models, but more should we choose a wrapper approach for the grpc stuff!
+@dynamicMemberLookup
+public struct GreeterMessage: SwiftProtobufWrapper {
+    public var __wrapped: _PB_GENERATED.GreeterMessage
+
+    public init() {
+        __wrapped = .init()
+    }
+
+    public init(
+        name: String
+    ) {
+        self.init()
+        __wrapped.name = name
+    }
+}
+
+@dynamicMemberLookup
+public struct GreetingMessage: SwiftProtobufWrapper {
+    public var __wrapped: _PB_GENERATED.GreetingMessage
+
+    public init() {
+        self.__wrapped = .init()
+    }
+
+    public init(
+        greet: String
+    ) {
+        self.init()
+        __wrapped.greet = greet
+    }
+}
 // ************
-
-// ******* generated clients
-public typealias GreeterClientProtocol = GRPC_SWIFT.GreeterClientProtocol
-public typealias GreeterClient = GRPC_SWIFT.GreeterClient
-
-public typealias GreeterAsyncClientProtocol = GRPC_SWIFT.GreeterAsyncClientProtocol
-public typealias GreeterAsyncClient = GRPC_SWIFT.GreeterAsyncClient
-
-public typealias GreeterClientInterceptorFactoryProtocol = GRPC_SWIFT.GreeterClientInterceptorFactoryProtocol
-// *******
 
 // TODO property addition: no need
 // TODO property renaming: extension with computed property (kinda hard, as we need to cover all grpc generated additional property: e.g. hasName, clearName for name!) => @available tag?
@@ -40,15 +122,6 @@ public typealias GreeterClientInterceptorFactoryProtocol = GRPC_SWIFT.GreeterCli
 // TODO enum case renaming?
 
 // TODO would be cool to generate @available (stuff into code for proper compiler warning notice)!
-
-protocol Interface {}
-
-extension Interface where Self == GreeterMessage {
-    var name: String {
-        self.name
-    }
-}
-extension GreeterMessage: Interface {}
 
 func test(message: GreeterMessageWrapper) {
     let oldName = message.name // testing "old" non migrated access
