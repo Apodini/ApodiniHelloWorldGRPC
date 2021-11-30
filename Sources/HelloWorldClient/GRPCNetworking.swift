@@ -18,6 +18,7 @@ open class GRPCNetworking {
     private var _channel: ClientConnection?
     var channel: ClientConnection {
         guard let channel = _channel else {
+            // TODO channelPools are now a thing
             let channel = ClientConnection
                 .usingTLSBackedByNIOSSL(on: eventLoopGroup)
                 .withTLS(certificateVerification: Self.VERIFICATION)

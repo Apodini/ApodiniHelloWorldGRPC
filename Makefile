@@ -14,3 +14,6 @@ clean:
 	rm webservice.proto
 	rm Sources/GRPC.SWIFT/webservice.grpc.swift
 	rm Sources/PB.SWIFT/webservice.pb.swift
+
+testfile:
+	protoc --swift_out=Sources/HelloWorldClient --swift_opt=Visibility=Public test.proto

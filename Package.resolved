@@ -105,8 +105,8 @@
         "repositoryURL": "https://github.com/grpc/grpc-swift.git",
         "state": {
           "branch": null,
-          "revision": "f7e418b315f6f084a08b9bf312e9a261a81101df",
-          "version": "1.4.1-async-await.3"
+          "revision": "0dd42b5b1bafc56548bdbf3a0ba06898944dc4ba",
+          "version": "1.6.0-async-await.1"
         }
       },
       {

@@ -20,7 +20,7 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/Apodini/Apodini.git", .upToNextMinor(from: "0.5.2")),
-        .package(url: "https://github.com/grpc/grpc-swift.git", .exact("1.4.1-async-await.3"))
+        .package(url: "https://github.com/grpc/grpc-swift.git", .exact("1.6.0-async-await.1"))
     ],
     targets: [
         .executableTarget(

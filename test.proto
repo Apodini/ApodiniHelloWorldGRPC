@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+message TestMessage {
+    string nameOne = 1;
+    optional string nameTwo = 2;
+
+    oneof asdf {
+        int32 asdf32 = 3;
+        int64 asdf64 = 4;
+    }
+
+    InnerMessage etc = 5;
+
+    message Test {
+        string asdf = 7;
+    }
+}
+
+message InnerMessage {
+    string test = 1;
+}

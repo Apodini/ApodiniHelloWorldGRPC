@@ -79,6 +79,10 @@ public struct GreeterMessage: SwiftProtobufWrapper {
         __wrapped = .init()
     }
 
+    // TODO to avoid constant migration between storage type (wrapped GreeterMessage) and exposed type
+    //   e.g. old property with different type, we could add additional storage layer and only write in the
+    //   wrapped type, when `traverse` or `decode` is called(?)
+
     public init(
         name: String
     ) {

@@ -10,10 +10,32 @@ import ApodiniMigration
 
 @main
 struct HelloWorldService: WebService {
+    let migrated: Bool = true
+
     var content: some Component {
+        // migrated:
+        // /*
+        MigratedGreeter()
+                .serviceName("Greeter")
+                .rpcName("greetName")
+                .identified(by: "Greeter.greetName")
+        // */
+
+        // non migrated
+        /*
         Greeter()
-            .serviceName("Greeter")
-            .rpcName("greetName")
+                .serviceName("Greeter")
+                .rpcName("greetName")
+                .identified(by: "Greeter.greetName")
+        // */
+    }
+
+    var metadata: Metadata {
+        if migrated {
+            Version(major: 1, minor: 1)
+        } else {
+            Version(major: 1)
+        }
     }
 
     var configuration: Configuration {
@@ -26,7 +48,25 @@ struct HelloWorldService: WebService {
             HTTP2Configuration(cert: cert, keyPath: key)
         }
 
-        Migrator(documentConfig: DocumentConfiguration.export(.directory("~/XcodeProjects/TUM/ApodiniHelloWorld/migrator")))
+        if migrated {
+            Migrator(
+                documentConfig: DocumentConfiguration.export(.directory("~/XcodeProjects/TUM/ApodiniHelloWorld/migrator")),
+                migrationGuideConfig: .compare(.file("/Users/andi/XcodeProjects/TUM/ApodiniHelloWorld/migrator/api_v1.0.0.json"), export: .directory("~/XcodeProjects/TUM/ApodiniHelloWorld/migrator"))
+            )
+        } else {
+            Migrator(
+                documentConfig: DocumentConfiguration.export(.directory("~/XcodeProjects/TUM/ApodiniHelloWorld/migrator"))
+            )
+        }
+    }
+}
+
+struct MigratedGreeter: Handler {
+    @Parameter
+    var name2: String
+
+    func handle() -> Greeting {
+        Greeting(stringLiteral: "Hello \(name2)")
     }
 }
 
@@ -42,9 +82,9 @@ struct Greeter: Handler {
 }
 
 struct Greeting: ExpressibleByStringLiteral, Content {
-    var greet: String
+    var greet2: String // TODO adjust migration manually
     
     init(stringLiteral: String) {
-        self.greet = stringLiteral
+        self.greet2 = stringLiteral
     }
 }

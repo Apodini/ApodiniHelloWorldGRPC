@@ -32,6 +32,17 @@ public struct GreeterMessage {
   public init() {}
 }
 
+extension SwiftProtobuf.UnknownStorage: Decodable, Encodable {
+  public init(from decoder: Decoder) throws {
+    self = UnknownStorage()
+  }
+
+  public func encode(to encoder: Encoder) throws {
+    // TODO encode data
+  }
+}
+extension GreeterMessage: Codable {}
+
 public struct GreetingMessage {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
