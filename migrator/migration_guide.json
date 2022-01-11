@@ -13,6 +13,21 @@
     "changes": [
         {
             "element": {
+                "networking": "NetworkingService",
+                "target": "base-url"
+            },
+            "change-type": "value-update",
+            "from": {
+                "string-value": "https://0.0.0.0:8080/v1"
+            },
+            "to": {
+                "string-value": "https://localhost/v1"
+            },
+            "breaking": true,
+            "solvable": true
+        },
+        {
+            "element": {
                 "object": "Greeting",
                 "target": "property"
             },

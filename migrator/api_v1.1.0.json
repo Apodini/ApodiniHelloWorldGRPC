@@ -1,7 +1,7 @@
 {
-    "id": "CD5E9736-6BCD-4306-AA24-0A1C6895D6E3",
+    "id": "2CB2E6D6-84FB-4B90-A2C1-8390E8BC766F",
     "info": {
-        "serverPath": "https://0.0.0.0:8080",
+        "serverPath": "https://localhost",
         "version": "v_1.1.0",
         "encoderConfiguration": {
             "dateEncodingStrategy": "deferredToDate",

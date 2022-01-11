@@ -87,7 +87,7 @@ public struct GreeterMessage: SwiftProtobufWrapper {
         name: String
     ) {
         self.init()
-        __wrapped.name = name
+        __wrapped.name2 = name
     }
 }
 
@@ -103,7 +103,7 @@ public struct GreetingMessage: SwiftProtobufWrapper {
         greet: String
     ) {
         self.init()
-        __wrapped.greet = greet
+        __wrapped.greet2 = greet
     }
 }
 // ************
@@ -165,7 +165,7 @@ struct GreeterMessageWrapper {
 
     init(wrapped: GreeterMessage) {
         self.wrapped = wrapped
-        self._name = .init(wrapped: wrapped, keyPath: \.name, migration: { .init(name: $0) })
+        self._name = .init(wrapped: wrapped, keyPath: \.name2, migration: { .init(name: $0) })
     }
 
     // TODO copy initializers!

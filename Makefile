@@ -6,9 +6,10 @@ pull:
 	curl --insecure https://127.0.0.1:8080/apodini/proto > webservice.proto
 
 generate:
-	protoc --swift_out=./Sources/PB.SWIFT --grpc-swift_out=./Sources/GRPC.SWIFT webservice.proto \
+	protoc --swift_out=./Sources/_PB_GENERATED --grpc-swift_out=./Sources/_GRPC_GENERATED webservice.proto \
 		--grpc-swift_opt=ExperimentalAsyncClient=true,Server=false,Visibility=Public \
-		--swift_opt=Visibility=Public
+		--swift_opt=Visibility=Public \
+		--grpc-migrator_out=./Sources/HelloWorldClient/Migrator
 
 clean:
 	rm webservice.proto

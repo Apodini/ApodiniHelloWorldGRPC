@@ -26,8 +26,10 @@ let promise: EventLoopPromise<Void> = group.next().makePromise()
 promise.completeWithTask {
     let message = GreeterMessage(name: "Andi")
 
+    let call = client.makeGreetNameCall(message)
+
     let response = try await client.greetName(message)
-    print("Response: \(response.greet)")
+    print("Response: \(response)")
 }
 
 try promise.futureResult.wait()

@@ -27,6 +27,9 @@ import SwiftProtobuf
 // TODO needs to be generated
 import _PB_FACADE
 
+/// APODINI-handler: Greeter
+/// APODINI-identifier: Greeter.greetName
+///
 /// Usage: instantiate `GreeterClient`, then call methods of this protocol to make API calls.
 public protocol GreeterClientProtocol: GRPCClient {
   var serviceName: String { get }
@@ -91,6 +94,8 @@ public final class GreeterClient: GreeterClientProtocol {
 }
 
 #if compiler(>=5.5) && canImport(_Concurrency)
+/// APODINI-handler: Greeter
+/// APODINI-identifier: Greeter.greetName
 @available(macOS 12, iOS 15, tvOS 15, watchOS 8, *)
 public protocol GreeterAsyncClientProtocol: GRPCClient {
   var serviceName: String { get }

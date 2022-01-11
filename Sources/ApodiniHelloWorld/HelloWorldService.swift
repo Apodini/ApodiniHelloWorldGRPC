@@ -4,8 +4,7 @@
 
 import Foundation
 import Apodini
-import ApodiniGRPC
-import ApodiniProtobuffer
+// TODO import ApodiniGRPC
 import ApodiniMigration
 
 @main
@@ -16,9 +15,9 @@ struct HelloWorldService: WebService {
         // migrated:
         // /*
         MigratedGreeter()
-                .serviceName("Greeter")
-                .rpcName("greetName")
-                .identified(by: "Greeter.greetName")
+            .identified(by: "Greeter.greetName")
+            //.gRPCServiceName("Greeter")
+            //.gRPCMethodName("greetName")
         // */
 
         // non migrated
@@ -39,14 +38,13 @@ struct HelloWorldService: WebService {
     }
 
     var configuration: Configuration {
-        GRPC {
-            Protobuffer()
-        }
-
         if let cert = Bundle.module.path(forResource: "cert", ofType: "pem"),
            let key = Bundle.module.path(forResource: "key", ofType: "pem") {
-            HTTP2Configuration(cert: cert, keyPath: key)
+            HTTPConfiguration(bindAddress: .interface("127.0.0.1", port: 8080), tlsConfigurationBuilder: .init(certificatePath: cert, keyPath: key))
         }
+
+        // TODO grpc dependency removed as it conflicts with our dev version of grpc-swift
+        // TODO GRPC(packageName: "HelloWorldPackage", serviceName: "Greeter")
 
         if migrated {
             Migrator(
@@ -81,7 +79,7 @@ struct Greeter: Handler {
     // TODO metadata for rpcName and serviceName?
 }
 
-struct Greeting: ExpressibleByStringLiteral, Content {
+struct Greeting: ExpressibleByStringLiteral, Content, Codable {
     var greet2: String // TODO adjust migration manually
     
     init(stringLiteral: String) {

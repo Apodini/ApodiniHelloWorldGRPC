@@ -19,7 +19,7 @@ let package = Package(
         .executable(name: "ApodiniHelloWorld", targets: ["ApodiniHelloWorld"])
     ],
     dependencies: [
-        .package(url: "https://github.com/Apodini/Apodini.git", .upToNextMinor(from: "0.5.2")),
+        .package(url: "https://github.com/Apodini/Apodini.git", .upToNextMinor(from: "0.6.2")),
         .package(url: "https://github.com/grpc/grpc-swift.git", .exact("1.6.0-async-await.1"))
     ],
     targets: [
@@ -28,7 +28,6 @@ let package = Package(
             dependencies: [
                 .product(name: "Apodini", package: "Apodini"),
                 .product(name: "ApodiniGRPC", package: "Apodini"),
-                .product(name: "ApodiniProtobuffer", package: "Apodini"),
                 .product(name: "ApodiniREST", package: "Apodini"),
                 .product(name: "ApodiniOpenAPI", package: "Apodini"),
                 .product(name: "ApodiniMigration", package: "Apodini")
